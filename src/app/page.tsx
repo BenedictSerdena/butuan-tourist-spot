@@ -1,65 +1,133 @@
-import Image from "next/image";
+"use client";
+
+import dynamic from "next/dynamic";
+import { useState } from "react";
+import { touristSpots, categoryColors, categoryLabels } from "@/data/spots";
+import { TouristSpot } from "@/types";
+import SpotCard from "@/components/SpotCard";
+import SpotDetail from "@/components/SpotDetail";
+
+const Map = dynamic(() => import("@/components/Map"), { ssr: false });
+
+const CATEGORIES = ["all", "heritage", "nature", "religious", "museum", "recreation"] as const;
+type FilterCategory = (typeof CATEGORIES)[number];
 
 export default function Home() {
+  const [selectedSpot, setSelectedSpot] = useState<TouristSpot | null>(null);
+  const [detailSpot, setDetailSpot] = useState<TouristSpot | null>(null);
+  const [filter, setFilter] = useState<FilterCategory>("all");
+
+  const filteredSpots =
+    filter === "all"
+      ? touristSpots
+      : touristSpots.filter((s) => s.category === filter);
+
+  function handleSpotSelect(spot: TouristSpot) {
+    setSelectedSpot(spot);
+    setDetailSpot(spot);
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="flex h-screen flex-col bg-gray-50">
+      {/* Header */}
+      <header className="z-10 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-3 shadow-sm">
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-500 text-white text-lg font-bold">
+            B
+          </div>
+          <div>
+            <h1 className="text-lg font-bold text-gray-900 leading-tight">Butuan Tourist Spots</h1>
+            <p className="text-xs text-gray-500">Agusan del Norte, Philippines</p>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        <span className="hidden sm:inline-block rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
+          {touristSpots.length} destinations
+        </span>
+      </header>
+
+      {/* Category Filter */}
+      <div className="z-10 flex gap-2 overflow-x-auto border-b border-gray-200 bg-white px-4 py-2">
+        {CATEGORIES.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setFilter(cat)}
+            className={`flex-shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
+              filter === cat
+                ? "text-white shadow"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+            }`}
+            style={
+              filter === cat
+                ? {
+                    backgroundColor:
+                      cat === "all"
+                        ? "#F59E0B"
+                        : categoryColors[cat as TouristSpot["category"]],
+                  }
+                : {}
+            }
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+            {cat === "all" ? "All" : categoryLabels[cat as TouristSpot["category"]]}
+          </button>
+        ))}
+      </div>
+
+      {/* Main Layout */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar */}
+        <aside className="hidden w-72 flex-shrink-0 flex-col overflow-y-auto border-r border-gray-200 bg-gray-50 md:flex">
+          <div className="p-3 space-y-2">
+            <p className="px-1 text-xs text-gray-400 uppercase tracking-widest font-medium">
+              {filteredSpots.length} spot{filteredSpots.length !== 1 ? "s" : ""}
+            </p>
+            {filteredSpots.map((spot) => (
+              <SpotCard
+                key={spot.id}
+                spot={spot}
+                isSelected={selectedSpot?.id === spot.id}
+                onClick={handleSpotSelect}
+              />
+            ))}
+          </div>
+        </aside>
+
+        {/* Map */}
+        <main className="relative flex-1">
+          <Map
+            spots={filteredSpots}
+            selectedSpot={selectedSpot}
+            onSpotSelect={handleSpotSelect}
+          />
+
+          {/* Mobile floating cards */}
+          <div className="absolute bottom-0 left-0 right-0 md:hidden z-[999]">
+            <div className="flex gap-3 overflow-x-auto p-3">
+              {filteredSpots.map((spot) => (
+                <div
+                  key={spot.id}
+                  onClick={() => handleSpotSelect(spot)}
+                  className={`flex-shrink-0 w-48 cursor-pointer rounded-xl border-2 bg-white p-3 shadow-lg transition-all ${
+                    selectedSpot?.id === spot.id ? "border-amber-500" : "border-transparent"
+                  }`}
+                >
+                  <span
+                    className="rounded-full px-2 py-0.5 text-xs font-medium text-white"
+                    style={{ backgroundColor: categoryColors[spot.category] }}
+                  >
+                    {categoryLabels[spot.category]}
+                  </span>
+                  <p className="mt-1 text-sm font-semibold text-gray-900 line-clamp-2">{spot.name}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </main>
+      </div>
+
+      {/* Detail Modal */}
+      {detailSpot && (
+        <SpotDetail spot={detailSpot} onClose={() => setDetailSpot(null)} />
+      )}
     </div>
   );
 }
