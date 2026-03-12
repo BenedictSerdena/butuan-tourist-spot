@@ -80,14 +80,80 @@ export const touristSpots: TouristSpot[] = [
   },
   {
     id: 8,
-    name: "Tinago Falls",
+    name: "Delta Discovery Park",
     description:
-      "A hidden waterfall — 'tinago' means 'hidden' in Bisaya — tucked inside a gorge accessible only by descending hundreds of steps. One of the most dramatic natural attractions near Butuan.",
+      "An 85-hectare eco-adventure park featuring the longest single zipline in Mindanao. A one-stop destination for outdoor thrills including ATV rides, horseback riding, a butterfly sanctuary, and eco-trails with panoramic views of the Butuan landscape.",
+    category: "recreation",
+    coordinates: [8.9069, 125.5022],
+    image: "https://placehold.co/640x300/D4880A/white?text=Delta+Discovery+Park",
+    highlights: ["1.3km zipline (longest in Mindanao)", "ATV & horseback riding", "Butterfly sanctuary", "Eco-trails & swimming"],
+    address: "Brgy. Bonbon, Butuan City, Agusan del Norte",
+  },
+  {
+    id: 9,
+    name: "Bood Promontory Eco-Park",
+    description:
+      "A historical hilltop overlooking the Masao River, marking where the first Catholic Easter Mass in Mindanao was held on April 8, 1521. Features monuments of Magellan and local rajas, native vegetation, and sweeping views of Butuan City.",
+    category: "heritage",
+    coordinates: [8.9527, 125.4930],
+    image: "https://placehold.co/640x300/8B5E3C/white?text=Bood+Promontory",
+    highlights: ["First Easter Mass in Mindanao (1521)", "Magellan & Raja statues", "Ancient Hadyate tree", "Panoramic city views"],
+    address: "Brgy. Pinamanculan, Butuan City, Agusan del Norte",
+  },
+  {
+    id: 10,
+    name: "Guingona Park",
+    description:
+      "Butuan's main public plaza and city center gathering place, home to three ancient Acacia trees over 100 years old and the National Shrine of the Philippine Flag in Mindanao — commemorating the first formal raising of the flag on January 17, 1899.",
+    category: "heritage",
+    coordinates: [8.9476, 125.5431],
+    image: "https://placehold.co/640x300/8B5E3C/white?text=Guingona+Park",
+    highlights: ["100-year-old Acacia trees", "National Shrine of the PH Flag", "Historic city center", "Open 24/7, free admission"],
+    address: "Jose S. Aquino Avenue, Butuan City, Agusan del Norte",
+  },
+  {
+    id: 11,
+    name: "Mt. Mayapay",
+    description:
+      "A distinctive 675-meter flat-topped mountain that has been a landmark for Butuan City for over a millennium. The rewarding trek offers views of Butuan City, Agusan River, Butuan Bay, and even Camiguin Island on clear days.",
     category: "nature",
-    coordinates: [8.1596, 124.2265],
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Tinago_Falls.jpg/640px-Tinago_Falls.jpg",
-    highlights: ["Hidden gorge waterfall", "400+ steps descent", "Crystal clear pool", "Iconic Mindanao landmark"],
-    address: "Lanao del Norte (near Butuan region)",
+    coordinates: [8.92, 125.49],
+    image: "https://placehold.co/640x300/2D6A4F/white?text=Mt.+Mayapay",
+    highlights: ["675m flat-topped summit", "Views of Butuan Bay & Camiguin", "3-4 hour trek", "Historic 1,000-year landmark"],
+    address: "Brgy. Bonbon, Butuan City, Agusan del Norte",
+  },
+  {
+    id: 12,
+    name: "Dagandang Falls",
+    description:
+      "A scenic two-tiered waterfall system deep in the forest of Barangay Sumile. The falls feature natural swimming pools, rock slides, and a cave formation — an adventurous day-trip for those willing to trek.",
+    category: "nature",
+    coordinates: [8.8259, 125.6261],
+    image: "https://placehold.co/640x300/2D6A4F/white?text=Dagandang+Falls",
+    highlights: ["Two-tiered waterfall", "Natural rock slides", "Cave formation", "Pristine forest setting"],
+    address: "Brgy. Sumile, Butuan City, Agusan del Norte",
+  },
+  {
+    id: 13,
+    name: "Magellan's Landing Site",
+    description:
+      "A coastal monument in Barangay Masao marking the historic landing of Ferdinand Magellan in the Philippines on March 17, 1521. Features sculptural monuments, bronze plaques, and commemorates the blood compact between Magellan and Raja Siaiu.",
+    category: "heritage",
+    coordinates: [8.944, 125.522],
+    image: "https://placehold.co/640x300/8B5E3C/white?text=Magellan+Landing+Site",
+    highlights: ["Magellan's 1521 landing marker", "Bronze plaques with history", "Coastal monument", "Free admission"],
+    address: "Brgy. Masao, Butuan City, Agusan del Norte",
+  },
+  {
+    id: 14,
+    name: "Macapagal Bridge",
+    description:
+      "The second-longest bridge in Mindanao at 908 meters, this cable-stayed steel bridge spans the Agusan River and is one of Butuan's most recognizable landmarks. It offers sweeping river views and is especially photogenic at dusk.",
+    category: "heritage",
+    coordinates: [8.95, 125.51],
+    image: "https://placehold.co/640x300/8B5E3C/white?text=Macapagal+Bridge",
+    highlights: ["2nd longest bridge in Mindanao", "908-meter cable-stayed span", "Agusan River views", "Iconic sunset photography spot"],
+    address: "Mayor Democrito D. Plaza II Ave., Butuan City, Agusan del Norte",
   },
 ];
 

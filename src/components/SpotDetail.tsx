@@ -6,9 +6,10 @@ import { categoryColors, categoryLabels } from "@/data/spots";
 interface SpotDetailProps {
   spot: TouristSpot;
   onClose: () => void;
+  onGetDirections: (spot: TouristSpot) => void;
 }
 
-export default function SpotDetail({ spot, onClose }: SpotDetailProps) {
+export default function SpotDetail({ spot, onClose, onGetDirections }: SpotDetailProps) {
   return (
     <div className="fixed inset-0 z-[9999] flex items-end justify-center sm:items-center p-4 bg-black/50 backdrop-blur-sm">
       <div className="w-full max-w-lg rounded-2xl bg-white shadow-2xl overflow-hidden animate-in slide-in-from-bottom-4 duration-300">
@@ -65,6 +66,16 @@ export default function SpotDetail({ spot, onClose }: SpotDetailProps) {
               ))}
             </ul>
           </div>
+
+          <button
+            onClick={() => onGetDirections(spot)}
+            className="mt-5 w-full flex items-center justify-center gap-2 rounded-xl bg-amber-500 py-3 text-sm font-semibold text-white hover:bg-amber-600 transition-colors"
+          >
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+            </svg>
+            Get Directions
+          </button>
         </div>
       </div>
     </div>
