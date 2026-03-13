@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { TouristSpot } from "@/types";
 
 interface TravelInfo {
@@ -49,7 +50,10 @@ const MODES = [
 ] as const;
 
 export default function TravelPanel({ spot, userLocation, onClose }: TravelPanelProps) {
-  const travel = calcTravel(userLocation, spot.coordinates);
+  const travel = useMemo(
+    () => calcTravel(userLocation, spot.coordinates),
+    [userLocation, spot.coordinates]
+  );
 
   const times: Record<(typeof MODES)[number]["key"], string> = {
     walk: fmt(travel.walkMinutes),

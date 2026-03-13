@@ -1,207 +1,193 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { useState, useCallback } from "react";
-import { touristSpots, categoryColors, categoryLabels } from "@/data/spots";
-import { TouristSpot } from "@/types";
-import SpotCard from "@/components/SpotCard";
-import SpotDetail from "@/components/SpotDetail";
-import TravelPanel from "@/components/TravelPanel";
+import Link from "next/link";
+import { touristSpots, categoryColors, categoryIcons, categoryLabels, SPOT_CATEGORIES } from "@/data/spots";
 
-const Map = dynamic(() => import("@/components/Map"), { ssr: false });
+const STATS = [
+  { value: String(touristSpots.length), label: "Spots to explore" },
+  { value: "Free", label: "No sign-up needed" },
+  { value: "5", label: "Categories" },
+];
 
-const CATEGORIES = ["all", "heritage", "nature", "religious", "museum", "recreation"] as const;
-type FilterCategory = (typeof CATEGORIES)[number];
-
-export default function Home() {
-  const [selectedSpot, setSelectedSpot] = useState<TouristSpot | null>(null);
-  const [detailSpot, setDetailSpot] = useState<TouristSpot | null>(null);
-  const [filter, setFilter] = useState<FilterCategory>("all");
-  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
-  const [locating, setLocating] = useState(false);
-  const [showTravel, setShowTravel] = useState(false);
-
-  const filteredSpots =
-    filter === "all"
-      ? touristSpots
-      : touristSpots.filter((s) => s.category === filter);
-
-  function handleSpotSelect(spot: TouristSpot) {
-    setSelectedSpot(spot);
-    setDetailSpot(spot);
-    setShowTravel(false);
-  }
-
-  const handleLocate = useCallback(() => {
-    if (!navigator.geolocation) return;
-    setLocating(true);
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setUserLocation([pos.coords.latitude, pos.coords.longitude]);
-        setLocating(false);
-      },
-      () => setLocating(false),
-      { timeout: 10000 }
-    );
-  }, []);
-
-  function handleGetDirections(spot: TouristSpot) {
-    setDetailSpot(null);
-    setSelectedSpot(spot);
-    if (!userLocation) {
-      setLocating(true);
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          setUserLocation([pos.coords.latitude, pos.coords.longitude]);
-          setLocating(false);
-          setShowTravel(true);
-        },
-        () => setLocating(false),
-        { timeout: 10000 }
-      );
-    } else {
-      setShowTravel(true);
-    }
-  }
-
+export default function LandingPage() {
   return (
-    <div className="flex h-screen flex-col bg-gray-50">
-      {/* Header */}
-      <header className="z-10 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-3 shadow-sm">
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-500 text-white text-lg font-bold">
-            B
-          </div>
-          <div>
-            <h1 className="text-lg font-bold text-gray-900 leading-tight">Butuan Tourist Spots</h1>
-            <p className="text-xs text-gray-500">Agusan del Norte, Philippines</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={handleLocate}
-            title="Show my location"
-            className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
-              userLocation
-                ? "bg-blue-100 text-blue-700"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-            }`}
-          >
-            {locating ? (
-              <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
-            ) : (
-              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-            )}
-            <span className="hidden sm:inline">{userLocation ? "Located" : "My Location"}</span>
-          </button>
-          <span className="hidden sm:inline-block rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
-            {touristSpots.length} destinations
-          </span>
-        </div>
-      </header>
+    <div className="min-h-screen bg-[#FFF8F2]">
 
-      {/* Category Filter */}
-      <div className="z-10 flex gap-2 overflow-x-auto border-b border-gray-200 bg-white px-4 py-2">
-        {CATEGORIES.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setFilter(cat)}
-            className={`flex-shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
-              filter === cat
-                ? "text-white shadow"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-            }`}
-            style={
-              filter === cat
-                ? {
-                    backgroundColor:
-                      cat === "all"
-                        ? "#F59E0B"
-                        : categoryColors[cat as TouristSpot["category"]],
-                  }
-                : {}
-            }
+      {/* Navbar */}
+      <nav className="sticky top-0 z-50 border-b border-[#F0E8DF] bg-white/80 backdrop-blur-md">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-400 text-sm font-black text-white shadow-sm">
+              B
+            </div>
+            <span className="text-sm font-bold text-gray-800 tracking-tight">Butuan Spots</span>
+          </div>
+          <div className="hidden items-center gap-6 text-sm font-medium text-gray-500 sm:flex">
+            <span>Heritage</span>
+            <span>Nature</span>
+            <span>Museums</span>
+          </div>
+          <Link
+            href="/map"
+            className="rounded-xl bg-amber-400 px-4 py-2 text-sm font-bold text-white shadow-sm hover:bg-amber-500 transition-colors"
           >
-            {cat === "all" ? "All" : categoryLabels[cat as TouristSpot["category"]]}
-          </button>
-        ))}
-      </div>
+            Open Map
+          </Link>
+        </div>
+      </nav>
 
-      {/* Main Layout */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar */}
-        <aside className="hidden w-72 flex-shrink-0 flex-col overflow-y-auto border-r border-gray-200 bg-gray-50 md:flex">
-          <div className="p-3 space-y-2">
-            <p className="px-1 text-xs text-gray-400 uppercase tracking-widest font-medium">
-              {filteredSpots.length} spot{filteredSpots.length !== 1 ? "s" : ""}
-            </p>
-            {filteredSpots.map((spot) => (
-              <SpotCard
-                key={spot.id}
-                spot={spot}
-                isSelected={selectedSpot?.id === spot.id}
-                onClick={handleSpotSelect}
+      <main className="mx-auto max-w-6xl px-6">
+
+        {/* Hero */}
+        <section className="flex flex-col items-center py-16 text-center sm:py-24">
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-amber-100 px-4 py-1.5 text-xs font-semibold text-amber-700">
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
+            Agusan del Norte, Philippines 🇵🇭
+          </div>
+
+          <h1 className="mb-5 max-w-2xl text-5xl font-black leading-tight tracking-tight text-gray-900 sm:text-6xl">
+            Your guide to{" "}
+            <span className="relative inline-block">
+              <span className="relative z-10">Butuan City</span>
+              <span
+                className="absolute bottom-1 left-0 -z-0 h-3 w-full rounded-sm opacity-40"
+                style={{ backgroundColor: "#F59E0B" }}
               />
+            </span>
+          </h1>
+
+          <p className="mb-8 max-w-lg text-base text-gray-500 leading-relaxed sm:text-lg">
+            Discover heritage, nature, and culture — all on one interactive map. No account needed, just explore.
+          </p>
+
+          <div className="flex flex-col items-center gap-3 sm:flex-row">
+            <Link
+              href="/map"
+              className="group flex items-center gap-2.5 rounded-2xl bg-amber-400 px-7 py-3.5 text-base font-bold text-white shadow-lg shadow-amber-200 transition-all hover:bg-amber-500 hover:shadow-amber-300 hover:-translate-y-0.5"
+            >
+              Explore the Map
+              <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+            <a
+              href="#spots"
+              className="rounded-2xl border border-gray-200 bg-white px-7 py-3.5 text-base font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              Browse spots ↓
+            </a>
+          </div>
+
+          {/* Stats */}
+          <div className="mt-14 flex gap-8 sm:gap-14">
+            {STATS.map((s) => (
+              <div key={s.label} className="text-center">
+                <p className="text-2xl font-black text-gray-900 sm:text-3xl">{s.value}</p>
+                <p className="mt-0.5 text-xs text-gray-400">{s.label}</p>
+              </div>
             ))}
           </div>
-        </aside>
+        </section>
 
-        {/* Map */}
-        <main className="relative flex-1">
-          <Map
-            spots={filteredSpots}
-            selectedSpot={selectedSpot}
-            userLocation={userLocation}
-            onSpotSelect={handleSpotSelect}
-          />
-
-          {/* Travel time panel */}
-          {showTravel && selectedSpot && userLocation && (
-            <TravelPanel
-              spot={selectedSpot}
-              userLocation={userLocation}
-              onClose={() => setShowTravel(false)}
-            />
-          )}
-
-          {/* Mobile floating cards */}
-          {!showTravel && (
-            <div className="absolute bottom-0 left-0 right-0 md:hidden z-[999]">
-              <div className="flex gap-3 overflow-x-auto p-3">
-                {filteredSpots.map((spot) => (
-                  <div
-                    key={spot.id}
-                    onClick={() => handleSpotSelect(spot)}
-                    className={`flex-shrink-0 w-48 cursor-pointer rounded-xl border-2 bg-white p-3 shadow-lg transition-all ${
-                      selectedSpot?.id === spot.id ? "border-amber-500" : "border-transparent"
-                    }`}
-                  >
-                    <span
-                      className="rounded-full px-2 py-0.5 text-xs font-medium text-white"
-                      style={{ backgroundColor: categoryColors[spot.category] }}
-                    >
-                      {categoryLabels[spot.category]}
-                    </span>
-                    <p className="mt-1 text-sm font-semibold text-gray-900 line-clamp-2">{spot.name}</p>
-                  </div>
-                ))}
-              </div>
+        {/* Category cards */}
+        <section className="mb-16">
+          <div className="mb-6 flex items-end justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest text-amber-500">Explore by type</p>
+              <h2 className="mt-1 text-2xl font-black text-gray-900">What are you looking for?</h2>
             </div>
-          )}
-        </main>
-      </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+            {SPOT_CATEGORIES.map((cat) => {
+              const count = touristSpots.filter((s) => s.category === cat).length;
+              return (
+                <Link
+                  key={cat}
+                  href="/map"
+                  className="group flex flex-col items-center gap-2 rounded-2xl border border-gray-100 bg-white p-5 text-center shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
+                >
+                  <div
+                    className="flex h-12 w-12 items-center justify-center rounded-xl text-2xl transition-transform group-hover:scale-110"
+                    style={{ backgroundColor: `${categoryColors[cat]}18` }}
+                  >
+                    {categoryIcons[cat]}
+                  </div>
+                  <p className="text-sm font-bold text-gray-800">{categoryLabels[cat]}</p>
+                  <p className="text-xs text-gray-400">{count} spot{count !== 1 ? "s" : ""}</p>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
 
-      {/* Detail Modal */}
-      {detailSpot && (
-        <SpotDetail
-          spot={detailSpot}
-          onClose={() => setDetailSpot(null)}
-          onGetDirections={handleGetDirections}
-        />
-      )}
+        {/* Featured spots */}
+        <section id="spots" className="mb-20">
+          <div className="mb-6">
+            <p className="text-xs font-bold uppercase tracking-widest text-amber-500">Don&apos;t miss these</p>
+            <h2 className="mt-1 text-2xl font-black text-gray-900">Featured destinations</h2>
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {touristSpots.slice(0, 6).map((spot) => (
+              <Link
+                key={spot.id}
+                href="/map"
+                className="group overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
+              >
+                <div className="relative h-40 overflow-hidden bg-gray-100">
+                  <img
+                    src={spot.image}
+                    alt={spot.name}
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = `https://placehold.co/400x160/${categoryColors[spot.category].replace("#", "")}/ffffff?text=${encodeURIComponent(spot.name.split(" ")[0])}`;
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                  <span
+                    className="absolute bottom-3 left-3 rounded-lg px-2 py-1 text-[11px] font-bold text-white"
+                    style={{ backgroundColor: categoryColors[spot.category] }}
+                  >
+                    {categoryIcons[spot.category]} {categoryLabels[spot.category]}
+                  </span>
+                </div>
+                <div className="p-4">
+                  <h3 className="font-bold text-gray-900 leading-tight">{spot.name}</h3>
+                  <p className="mt-1 text-xs text-gray-400 line-clamp-1">{spot.address.split(",")[0]}</p>
+                  <p className="mt-2 text-sm text-gray-500 line-clamp-2 leading-relaxed">{spot.description}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+          <div className="mt-6 text-center">
+            <Link
+              href="/map"
+              className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              View all {touristSpots.length} spots on the map →
+            </Link>
+          </div>
+        </section>
+
+        {/* Bottom CTA */}
+        <section className="mb-16 overflow-hidden rounded-3xl bg-amber-400 px-8 py-12 text-center">
+          <p className="text-xs font-bold uppercase tracking-widest text-amber-100">Ready to go?</p>
+          <h2 className="mt-2 text-3xl font-black text-white sm:text-4xl">Start your Butuan adventure</h2>
+          <p className="mt-3 text-amber-100 text-sm sm:text-base">
+            Interactive map · Travel time estimates · 14 destinations
+          </p>
+          <Link
+            href="/map"
+            className="mt-7 inline-flex items-center gap-2 rounded-2xl bg-white px-8 py-3.5 text-sm font-bold text-amber-500 shadow-lg transition-all hover:bg-amber-50 hover:shadow-xl"
+          >
+            Open the Map →
+          </Link>
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-[#F0E8DF] bg-white py-6 text-center text-xs text-gray-400">
+        <p>Butuan Tourist Spots · Agusan del Norte, Philippines · Built with Next.js & Leaflet</p>
+      </footer>
     </div>
   );
 }

@@ -172,3 +172,19 @@ export const categoryLabels: Record<TouristSpot["category"], string> = {
   museum: "Museum",
   recreation: "Recreation",
 };
+
+export const categoryIcons: Record<TouristSpot["category"], string> = {
+  heritage: "🏛️",
+  nature: "🌿",
+  museum: "🏺",
+  religious: "⛪",
+  recreation: "🎢",
+};
+
+export const SPOT_CATEGORIES: TouristSpot["category"][] = [
+  "heritage",
+  "nature",
+  "museum",
+  "religious",
+  "recreation",
+];
