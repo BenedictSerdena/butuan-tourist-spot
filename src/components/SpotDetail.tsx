@@ -5,11 +5,13 @@ import { categoryColors, categoryIcons, categoryLabels } from "@/data/spots";
 
 interface SpotDetailProps {
   spot: TouristSpot;
+  isVisited: boolean;
   onClose: () => void;
   onGetDirections: (spot: TouristSpot) => void;
+  onToggleVisited: () => void;
 }
 
-export default function SpotDetail({ spot, onClose, onGetDirections }: SpotDetailProps) {
+export default function SpotDetail({ spot, isVisited, onClose, onGetDirections, onToggleVisited }: SpotDetailProps) {
   return (
     <div className="fixed inset-0 z-[9999] flex items-end justify-center sm:items-center p-4 bg-black/60 backdrop-blur-sm">
       <div className="w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl">
@@ -83,26 +85,63 @@ export default function SpotDetail({ spot, onClose, onGetDirections }: SpotDetai
           </div>
 
           {/* Action buttons */}
-          <div className="mt-5 flex gap-2">
+          <div className="mt-5 space-y-2">
             <button
-              onClick={onClose}
-              className="flex-1 rounded-xl border border-gray-200 py-3 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
+              onClick={onToggleVisited}
+              className={`w-full flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition-all ${
+                isVisited
+                  ? "bg-emerald-50 border border-emerald-200 text-emerald-700 hover:bg-emerald-100"
+                  : "bg-stone-50 border border-stone-200 text-stone-600 hover:bg-stone-100"
+              }`}
             >
-              Close
+              {isVisited ? (
+                <>
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                  </svg>
+                  Visited ✓
+                </>
+              ) : (
+                <>
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                  Mark as Visited
+                </>
+              )}
             </button>
-            <button
-              onClick={() => onGetDirections(spot)}
-              className="flex-[2] flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-white transition-all hover:opacity-90 shadow-lg"
-              style={{
-                backgroundColor: categoryColors[spot.category],
-                boxShadow: `0 8px 20px ${categoryColors[spot.category]}40`,
-              }}
+            <div className="flex gap-2">
+              <button
+                onClick={onClose}
+                className="flex-1 rounded-xl border border-gray-200 py-3 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
+              >
+                Close
+              </button>
+              <button
+                onClick={() => onGetDirections(spot)}
+                className="flex-[2] flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-white transition-all hover:opacity-90 shadow-lg"
+                style={{
+                  backgroundColor: categoryColors[spot.category],
+                  boxShadow: `0 8px 20px ${categoryColors[spot.category]}40`,
+                }}
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                </svg>
+                Travel Time
+              </button>
+            </div>
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${spot.coordinates[0]},${spot.coordinates[1]}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#4285F4] py-3 text-sm font-bold text-white shadow-md shadow-blue-100 transition-all hover:bg-[#3367D6] active:scale-95"
             >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
               </svg>
-              Get Directions
-            </button>
+              Open in Google Maps
+            </a>
           </div>
         </div>
       </div>
