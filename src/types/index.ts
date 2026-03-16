@@ -7,4 +7,6 @@ export interface TouristSpot {
   image: string;
   highlights: string[];
   address: string;
+  hours: string;
+  bestTime: string;
 }

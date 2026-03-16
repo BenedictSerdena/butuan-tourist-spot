@@ -2,6 +2,7 @@
 
 import { TouristSpot } from "@/types";
 import { categoryColors, categoryIcons, categoryLabels } from "@/data/spots";
+import { getOpenInfo } from "@/utils/openNow";
 
 interface SpotCardProps {
   spot: TouristSpot;
@@ -37,12 +38,26 @@ export default function SpotCard({ spot, isSelected, isVisited, onClick }: SpotC
       </div>
 
       <div className="min-w-0 flex-1">
-        <p
-          className="text-[10px] font-bold uppercase tracking-widest"
-          style={{ color: categoryColors[spot.category] }}
-        >
-          {categoryLabels[spot.category]}
-        </p>
+        <div className="flex items-center justify-between gap-1">
+          <p
+            className="text-[10px] font-bold uppercase tracking-widest"
+            style={{ color: categoryColors[spot.category] }}
+          >
+            {categoryLabels[spot.category]}
+          </p>
+          {(() => {
+            const info = getOpenInfo(spot.hours);
+            const isOpen = info.status === "open" || info.status === "always";
+            return (
+              <span className={`flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9px] font-bold shrink-0 ${
+                isOpen ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-600"
+              }`}>
+                <span className={`h-1.5 w-1.5 rounded-full ${isOpen ? "bg-emerald-500" : "bg-red-500"}`} />
+                {info.label}
+              </span>
+            );
+          })()}
+        </div>
         <p className="text-sm font-semibold text-stone-900 leading-snug">{spot.name}</p>
         <p className="mt-0.5 text-xs text-stone-400 truncate">
           {spot.address.split(",").slice(0, 2).join(",")}

@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { TouristSpot } from "@/types";
 import { categoryColors, categoryIcons, categoryLabels } from "@/data/spots";
+import { getOpenInfo } from "@/utils/openNow";
 
 interface SpotDetailProps {
   spot: TouristSpot;
@@ -12,9 +14,27 @@ interface SpotDetailProps {
 }
 
 export default function SpotDetail({ spot, isVisited, onClose, onGetDirections, onToggleVisited }: SpotDetailProps) {
+  const [copied, setCopied] = useState(false);
+
+  async function handleShare() {
+    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${spot.coordinates[0]},${spot.coordinates[1]}`;
+    const shareData = {
+      title: spot.name,
+      text: `Check out ${spot.name} in Butuan City! ${spot.description.slice(0, 100)}…`,
+      url: mapsUrl,
+    };
+    if (navigator.share) {
+      await navigator.share(shareData).catch(() => null);
+    } else {
+      await navigator.clipboard.writeText(`${spot.name}\n${mapsUrl}`);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  }
+
   return (
     <div className="fixed inset-0 z-[9999] flex items-end justify-center sm:items-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl">
+      <div className="w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl max-h-[90vh] flex flex-col">
         {/* Image */}
         <div className="relative h-52 overflow-hidden bg-gray-100">
           <img
@@ -27,15 +47,32 @@ export default function SpotDetail({ spot, isVisited, onClose, onGetDirections, 
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
-          {/* Close button */}
-          <button
-            onClick={onClose}
-            className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm hover:bg-black/60 transition-colors"
-          >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+          {/* Top-right buttons */}
+          <div className="absolute right-3 top-3 flex items-center gap-2">
+            <button
+              onClick={handleShare}
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm hover:bg-black/60 transition-colors"
+              title={copied ? "Copied!" : "Share this spot"}
+            >
+              {copied ? (
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                </svg>
+              ) : (
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                </svg>
+              )}
+            </button>
+            <button
+              onClick={onClose}
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm hover:bg-black/60 transition-colors"
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
 
           {/* Category badge on image */}
           <div className="absolute bottom-4 left-4 flex items-center gap-2">
@@ -49,7 +86,7 @@ export default function SpotDetail({ spot, isVisited, onClose, onGetDirections, 
         </div>
 
         {/* Content */}
-        <div className="p-5">
+        <div className="overflow-y-auto p-5">
           <h2 className="text-xl font-black text-gray-900 leading-tight">{spot.name}</h2>
 
           <div className="mt-1.5 flex items-center gap-1.5 text-xs text-gray-400">
@@ -61,6 +98,32 @@ export default function SpotDetail({ spot, isVisited, onClose, onGetDirections, 
           </div>
 
           <p className="mt-3 text-sm text-gray-500 leading-relaxed">{spot.description}</p>
+
+          {/* Hours & Best Time */}
+          <div className="mt-4 grid grid-cols-2 gap-2">
+            <div className="rounded-xl bg-stone-50 px-3 py-2.5">
+              <div className="flex items-center justify-between mb-1">
+                <p className="text-[9px] font-bold uppercase tracking-widest text-stone-400">Hours</p>
+                {(() => {
+                  const info = getOpenInfo(spot.hours);
+                  const isOpen = info.status === "open" || info.status === "always";
+                  return (
+                    <span className={`flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9px] font-bold ${
+                      isOpen ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-600"
+                    }`}>
+                      <span className={`h-1.5 w-1.5 rounded-full ${isOpen ? "bg-emerald-500" : "bg-red-500"}`} />
+                      {info.label}
+                    </span>
+                  );
+                })()}
+              </div>
+              <p className="text-xs font-semibold text-stone-700">{spot.hours}</p>
+            </div>
+            <div className="rounded-xl bg-amber-50 px-3 py-2.5">
+              <p className="text-[9px] font-bold uppercase tracking-widest text-amber-400 mb-1">Best Time</p>
+              <p className="text-xs font-semibold text-amber-700">{spot.bestTime}</p>
+            </div>
+          </div>
 
           {/* Highlights */}
           <div className="mt-4">

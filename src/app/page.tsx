@@ -9,41 +9,21 @@ const STATS = [
   { value: "5", label: "Categories" },
 ];
 
-const NAV_CATEGORIES = SPOT_CATEGORIES.map((c) => categoryLabels[c]);
-
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#F5F0EB] text-[#1C1917]">
 
-      {/* Navbar */}
-      <nav className="sticky top-0 z-50 border-b border-stone-200/80 bg-[#F5F0EB]/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <span className="text-base font-bold tracking-tight text-stone-900">
-            Butuan Tourist Spots
-          </span>
-
-          <div className="hidden items-center gap-7 sm:flex">
-            {NAV_CATEGORIES.map((label, i) => (
-              <span
-                key={label}
-                className={`text-sm transition-colors ${
-                  i === 0
-                    ? "font-semibold text-stone-900 underline underline-offset-4 decoration-stone-900/60"
-                    : "font-medium text-stone-500 hover:text-stone-800"
-                }`}
-              >
-                {label}
-              </span>
-            ))}
-          </div>
-
-          <Link
-            href="/map"
-            className="rounded-full bg-stone-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-stone-700"
-          >
-            Explore Map
-          </Link>
-        </div>
+      {/* Minimal top bar — name only */}
+      <nav className="flex items-center justify-between px-6 py-5">
+        <span className="text-base font-bold tracking-tight text-stone-900">
+          Butuan Tourist Spots
+        </span>
+        <Link
+          href="/map"
+          className="rounded-full bg-stone-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-stone-700"
+        >
+          Explore Map
+        </Link>
       </nav>
 
       <main className="mx-auto max-w-5xl px-6">

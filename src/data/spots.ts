@@ -11,6 +11,8 @@ export const touristSpots: TouristSpot[] = [
     image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Balangay_boats.jpg/640px-Balangay_boats.jpg",
     highlights: ["Ancient balangay boats (320 AD)", "UNESCO heritage site", "Archaeological finds", "Free admission"],
     address: "Libertad, Butuan City, Agusan del Norte",
+    hours: "8:00 AM – 5:00 PM (Mon–Sat)",
+    bestTime: "Morning",
   },
   {
     id: 2,
@@ -22,6 +24,8 @@ export const touristSpots: TouristSpot[] = [
     image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Butuan_City_Hall.jpg/640px-Butuan_City_Hall.jpg",
     highlights: ["Gold artifacts", "Pre-colonial history", "Kingdom of Butuan exhibits", "Free admission"],
     address: "J.C. Aquino Avenue, Butuan City, Agusan del Norte",
+    hours: "8:00 AM – 5:00 PM (Tue–Sun)",
+    bestTime: "Morning",
   },
   {
     id: 3,
@@ -33,6 +37,8 @@ export const touristSpots: TouristSpot[] = [
     image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Banza_Church.jpg/640px-Banza_Church.jpg",
     highlights: ["17th-century ruins", "Augustinian architecture", "Historical landmark", "Photography spot"],
     address: "Banza, Butuan City, Agusan del Norte",
+    hours: "Open anytime",
+    bestTime: "Golden hour",
   },
   {
     id: 4,
@@ -44,6 +50,8 @@ export const touristSpots: TouristSpot[] = [
     image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Saint_Joseph_Cathedral_Butuan.jpg/640px-Saint_Joseph_Cathedral_Butuan.jpg",
     highlights: ["Diocesan cathedral", "Active parish", "Colonial-era heritage", "City center landmark"],
     address: "Montilla Blvd., Butuan City, Agusan del Norte",
+    hours: "6:00 AM – 8:00 PM daily",
+    bestTime: "Early morning",
   },
   {
     id: 5,
@@ -55,6 +63,8 @@ export const touristSpots: TouristSpot[] = [
     image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Lake_Mainit.jpg/640px-Lake_Mainit.jpg",
     highlights: ["4th largest lake in PH", "Rare Mainit mudfish", "Freshwater fishing", "Scenic sunsets"],
     address: "Jabonga / Kitcharao, Agusan del Norte",
+    hours: "Open anytime",
+    bestTime: "Sunrise or sunset",
   },
   {
     id: 6,
@@ -66,6 +76,8 @@ export const touristSpots: TouristSpot[] = [
     image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Waterfall_Philippines.jpg/640px-Waterfall_Philippines.jpg",
     highlights: ["Twin waterfall formation", "Natural swimming area", "Jungle trekking", "Local eco-tourism"],
     address: "Tiniwisan, Butuan City, Agusan del Norte",
+    hours: "6:00 AM – 5:00 PM daily",
+    bestTime: "Dry season (Nov–May)",
   },
   {
     id: 7,
@@ -77,6 +89,8 @@ export const touristSpots: TouristSpot[] = [
     image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Agusan_del_Norte_Capitol.jpg/640px-Agusan_del_Norte_Capitol.jpg",
     highlights: ["Provincial government seat", "Landscaped grounds", "Freedom park", "Public events venue"],
     address: "J.C. Aquino Avenue, Butuan City, Agusan del Norte",
+    hours: "8:00 AM – 5:00 PM (Mon–Fri)",
+    bestTime: "Weekday morning",
   },
   {
     id: 8,
@@ -88,6 +102,8 @@ export const touristSpots: TouristSpot[] = [
     image: "https://placehold.co/640x300/D4880A/white?text=Delta+Discovery+Park",
     highlights: ["1.3km zipline (longest in Mindanao)", "ATV & horseback riding", "Butterfly sanctuary", "Eco-trails & swimming"],
     address: "Brgy. Bonbon, Butuan City, Agusan del Norte",
+    hours: "8:00 AM – 5:00 PM daily",
+    bestTime: "Weekday (less crowd)",
   },
   {
     id: 9,
@@ -99,6 +115,8 @@ export const touristSpots: TouristSpot[] = [
     image: "https://placehold.co/640x300/8B5E3C/white?text=Bood+Promontory",
     highlights: ["First Easter Mass in Mindanao (1521)", "Magellan & Raja statues", "Ancient Hadyate tree", "Panoramic city views"],
     address: "Brgy. Pinamanculan, Butuan City, Agusan del Norte",
+    hours: "7:00 AM – 5:00 PM daily",
+    bestTime: "Early morning",
   },
   {
     id: 10,
@@ -110,6 +128,8 @@ export const touristSpots: TouristSpot[] = [
     image: "https://placehold.co/640x300/8B5E3C/white?text=Guingona+Park",
     highlights: ["100-year-old Acacia trees", "National Shrine of the PH Flag", "Historic city center", "Open 24/7, free admission"],
     address: "Jose S. Aquino Avenue, Butuan City, Agusan del Norte",
+    hours: "Open 24/7",
+    bestTime: "Late afternoon",
   },
   {
     id: 11,
@@ -121,6 +141,8 @@ export const touristSpots: TouristSpot[] = [
     image: "https://placehold.co/640x300/2D6A4F/white?text=Mt.+Mayapay",
     highlights: ["675m flat-topped summit", "Views of Butuan Bay & Camiguin", "3-4 hour trek", "Historic 1,000-year landmark"],
     address: "Brgy. Bonbon, Butuan City, Agusan del Norte",
+    hours: "6:00 AM – 3:00 PM (start trek by)",
+    bestTime: "Dry season (Nov–Apr)",
   },
   {
     id: 12,
@@ -132,6 +154,8 @@ export const touristSpots: TouristSpot[] = [
     image: "https://placehold.co/640x300/2D6A4F/white?text=Dagandang+Falls",
     highlights: ["Two-tiered waterfall", "Natural rock slides", "Cave formation", "Pristine forest setting"],
     address: "Brgy. Sumile, Butuan City, Agusan del Norte",
+    hours: "6:00 AM – 4:00 PM daily",
+    bestTime: "Dry season (Nov–May)",
   },
   {
     id: 13,
@@ -143,6 +167,8 @@ export const touristSpots: TouristSpot[] = [
     image: "https://placehold.co/640x300/8B5E3C/white?text=Magellan+Landing+Site",
     highlights: ["Magellan's 1521 landing marker", "Bronze plaques with history", "Coastal monument", "Free admission"],
     address: "Brgy. Masao, Butuan City, Agusan del Norte",
+    hours: "Open anytime",
+    bestTime: "Afternoon",
   },
   {
     id: 14,
@@ -154,6 +180,8 @@ export const touristSpots: TouristSpot[] = [
     image: "https://placehold.co/640x300/8B5E3C/white?text=Macapagal+Bridge",
     highlights: ["2nd longest bridge in Mindanao", "908-meter cable-stayed span", "Agusan River views", "Iconic sunset photography spot"],
     address: "Mayor Democrito D. Plaza II Ave., Butuan City, Agusan del Norte",
+    hours: "Open 24/7",
+    bestTime: "Sunset or night",
   },
 ];
 
