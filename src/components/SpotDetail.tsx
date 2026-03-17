@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TouristSpot } from "@/types";
 import { categoryColors, categoryIcons, categoryLabels } from "@/data/spots";
 import { getOpenInfo } from "@/utils/openNow";
@@ -8,25 +8,35 @@ import { getOpenInfo } from "@/utils/openNow";
 interface SpotDetailProps {
   spot: TouristSpot;
   isVisited: boolean;
+  isInTrip: boolean;
   onClose: () => void;
   onGetDirections: (spot: TouristSpot) => void;
   onToggleVisited: () => void;
+  onToggleTrip: () => void;
 }
 
-export default function SpotDetail({ spot, isVisited, onClose, onGetDirections, onToggleVisited }: SpotDetailProps) {
+export default function SpotDetail({ spot, isVisited, isInTrip, onClose, onGetDirections, onToggleVisited, onToggleTrip }: SpotDetailProps) {
   const [copied, setCopied] = useState(false);
 
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
   async function handleShare() {
-    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${spot.coordinates[0]},${spot.coordinates[1]}`;
+    const spotUrl = `${window.location.origin}/spots/${spot.id}`;
     const shareData = {
       title: spot.name,
       text: `Check out ${spot.name} in Butuan City! ${spot.description.slice(0, 100)}…`,
-      url: mapsUrl,
+      url: spotUrl,
     };
     if (navigator.share) {
       await navigator.share(shareData).catch(() => null);
     } else {
-      await navigator.clipboard.writeText(`${spot.name}\n${mapsUrl}`);
+      await navigator.clipboard.writeText(spotUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
@@ -99,9 +109,9 @@ export default function SpotDetail({ spot, isVisited, onClose, onGetDirections, 
 
           <p className="mt-3 text-sm text-gray-500 leading-relaxed">{spot.description}</p>
 
-          {/* Hours & Best Time */}
-          <div className="mt-4 grid grid-cols-2 gap-2">
-            <div className="rounded-xl bg-stone-50 px-3 py-2.5">
+          {/* Hours, Best Time & Admission */}
+          <div className="mt-4 grid grid-cols-3 gap-2">
+            <div className="rounded-xl bg-stone-50 px-3 py-2.5 col-span-2">
               <div className="flex items-center justify-between mb-1">
                 <p className="text-[9px] font-bold uppercase tracking-widest text-stone-400">Hours</p>
                 {(() => {
@@ -119,10 +129,18 @@ export default function SpotDetail({ spot, isVisited, onClose, onGetDirections, 
               </div>
               <p className="text-xs font-semibold text-stone-700">{spot.hours}</p>
             </div>
-            <div className="rounded-xl bg-amber-50 px-3 py-2.5">
-              <p className="text-[9px] font-bold uppercase tracking-widest text-amber-400 mb-1">Best Time</p>
-              <p className="text-xs font-semibold text-amber-700">{spot.bestTime}</p>
+            <div className={`rounded-xl px-3 py-2.5 ${spot.admission === "Free" ? "bg-emerald-50" : "bg-blue-50"}`}>
+              <p className={`text-[9px] font-bold uppercase tracking-widest mb-1 ${spot.admission === "Free" ? "text-emerald-400" : "text-blue-400"}`}>
+                Admission
+              </p>
+              <p className={`text-xs font-bold ${spot.admission === "Free" ? "text-emerald-700" : "text-blue-700"}`}>
+                {spot.admission}
+              </p>
             </div>
+          </div>
+          <div className="mt-2 rounded-xl bg-amber-50 px-3 py-2.5">
+            <p className="text-[9px] font-bold uppercase tracking-widest text-amber-400 mb-1">Best Time to Visit</p>
+            <p className="text-xs font-semibold text-amber-700">{spot.bestTime}</p>
           </div>
 
           {/* Highlights */}
@@ -149,6 +167,30 @@ export default function SpotDetail({ spot, isVisited, onClose, onGetDirections, 
 
           {/* Action buttons */}
           <div className="mt-5 space-y-2">
+            <button
+              onClick={onToggleTrip}
+              className={`w-full flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition-all ${
+                isInTrip
+                  ? "bg-amber-50 border border-amber-200 text-amber-700 hover:bg-amber-100"
+                  : "bg-stone-50 border border-stone-200 text-stone-600 hover:bg-stone-100"
+              }`}
+            >
+              {isInTrip ? (
+                <>
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                  </svg>
+                  Added to Trip
+                </>
+              ) : (
+                <>
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  Add to Trip
+                </>
+              )}
+            </button>
             <button
               onClick={onToggleVisited}
               className={`w-full flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition-all ${

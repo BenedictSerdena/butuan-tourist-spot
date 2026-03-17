@@ -55,12 +55,14 @@ interface MapProps {
   spots: TouristSpot[];
   selectedSpot: TouristSpot | null;
   userLocation: [number, number] | null;
+  tripSpots: TouristSpot[];
   onSpotSelect: (spot: TouristSpot) => void;
 }
 
-export default function Map({ spots, selectedSpot, userLocation, onSpotSelect }: MapProps) {
+export default function Map({ spots, selectedSpot, userLocation, tripSpots, onSpotSelect }: MapProps) {
   const routeLine =
     userLocation && selectedSpot ? [userLocation, selectedSpot.coordinates] : null;
+  const tripLine = tripSpots.length >= 2 ? tripSpots.map((s) => s.coordinates) : null;
 
   return (
     <MapContainer center={[8.9475, 125.5406]} zoom={13} className="h-full w-full">
@@ -87,6 +89,13 @@ export default function Map({ spots, selectedSpot, userLocation, onSpotSelect }:
         <Polyline
           positions={routeLine}
           pathOptions={{ color: "#F59E0B", weight: 4, opacity: 0.85, dashArray: "10, 8" }}
+        />
+      )}
+
+      {tripLine && (
+        <Polyline
+          positions={tripLine}
+          pathOptions={{ color: "#10B981", weight: 3, opacity: 0.9, dashArray: "6, 6" }}
         />
       )}
 

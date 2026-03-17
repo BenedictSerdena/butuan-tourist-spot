@@ -8,18 +8,30 @@ import { TouristSpot } from "@/types";
 import SpotCard from "@/components/SpotCard";
 import SpotDetail from "@/components/SpotDetail";
 import TravelPanel from "@/components/TravelPanel";
+import TripPlanner from "@/components/TripPlanner";
 import { useVisited } from "@/hooks/useVisited";
 
 const Map = dynamic(() => import("@/components/Map"), { ssr: false });
 
 type FilterCategory = "all" | TouristSpot["category"];
-type SortKey = "default" | "name" | "category";
+type SortKey = "default" | "name" | "category" | "nearest";
 
 const SORT_OPTIONS: { key: SortKey; label: string }[] = [
   { key: "default", label: "Default" },
   { key: "name", label: "Name A–Z" },
   { key: "category", label: "By category" },
+  { key: "nearest", label: "Nearest first" },
 ];
+
+function haversineKm(a: [number, number], b: [number, number]): number {
+  const R = 6371;
+  const dLat = ((b[0] - a[0]) * Math.PI) / 180;
+  const dLon = ((b[1] - a[1]) * Math.PI) / 180;
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((a[0] * Math.PI) / 180) * Math.cos((b[0] * Math.PI) / 180) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
+}
 
 
 export default function MapPage() {
@@ -41,7 +53,17 @@ export default function MapPage() {
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
   const [locating, setLocating] = useState(false);
   const [showTravel, setShowTravel] = useState(false);
+  const [tripSpots, setTripSpots] = useState<TouristSpot[]>([]);
+  const [showTrip, setShowTrip] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null);
+
+  function toggleTrip(spot: TouristSpot) {
+    setTripSpots((prev) =>
+      prev.some((s) => s.id === spot.id)
+        ? prev.filter((s) => s.id !== spot.id)
+        : [...prev, spot]
+    );
+  }
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -64,8 +86,10 @@ export default function MapPage() {
     }
     if (sortBy === "name") return [...spots].sort((a, b) => a.name.localeCompare(b.name));
     if (sortBy === "category") return [...spots].sort((a, b) => a.category.localeCompare(b.category));
+    if (sortBy === "nearest" && userLocation)
+      return [...spots].sort((a, b) => haversineKm(userLocation, a.coordinates) - haversineKm(userLocation, b.coordinates));
     return spots;
-  }, [filter, search, sortBy]);
+  }, [filter, search, sortBy, userLocation]);
 
   function locateUser(onSuccess: (coords: [number, number]) => void) {
     if (!navigator.geolocation) return;
@@ -263,24 +287,31 @@ export default function MapPage() {
                 {sortOpen && (
                   <div className="absolute right-0 top-full z-50 mt-1.5 w-44 overflow-hidden rounded-xl border border-stone-100 bg-white shadow-xl shadow-stone-200">
                     <div className="p-1.5">
-                      {SORT_OPTIONS.map((opt) => (
-                        <button
-                          key={opt.key}
-                          onClick={() => { setSortBy(opt.key); setSortOpen(false); }}
-                          className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors ${
-                            sortBy === opt.key
-                              ? "bg-stone-900 font-semibold text-white"
-                              : "text-stone-700 hover:bg-stone-50"
-                          }`}
-                        >
-                          {opt.label}
-                          {sortBy === opt.key && (
-                            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                            </svg>
-                          )}
-                        </button>
-                      ))}
+                      {SORT_OPTIONS.map((opt) => {
+                        const disabled = opt.key === "nearest" && !userLocation;
+                        return (
+                          <button
+                            key={opt.key}
+                            onClick={() => { if (!disabled) { setSortBy(opt.key); setSortOpen(false); } }}
+                            disabled={disabled}
+                            className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors ${
+                              disabled
+                                ? "cursor-not-allowed text-stone-300"
+                                : sortBy === opt.key
+                                ? "bg-stone-900 font-semibold text-white"
+                                : "text-stone-700 hover:bg-stone-50"
+                            }`}
+                          >
+                            <span>{opt.label}</span>
+                            {disabled && <span className="text-[10px] text-stone-300">Enable location</span>}
+                            {!disabled && sortBy === opt.key && (
+                              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                              </svg>
+                            )}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
@@ -288,13 +319,28 @@ export default function MapPage() {
             </div>
           </div>
 
-          {/* Suggest a Spot */}
-          <div className="border-b border-stone-100 px-3 pb-3">
+          {/* Suggest a Spot + Trip Planner */}
+          <div className="border-b border-stone-100 px-3 pb-3 flex gap-2">
             <button
               onClick={handleSuggest}
-              className="flex w-full items-center justify-center gap-2 rounded-xl border border-amber-200 bg-amber-50 py-2 text-xs font-bold text-amber-700 transition-all hover:bg-amber-100"
+              className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-amber-200 bg-amber-50 py-2 text-xs font-bold text-amber-700 transition-all hover:bg-amber-100"
             >
-              🎲 Suggest a Spot
+              🎲 Suggest
+            </button>
+            <button
+              onClick={() => setShowTrip((v) => !v)}
+              className={`flex flex-1 items-center justify-center gap-2 rounded-xl border py-2 text-xs font-bold transition-all ${
+                showTrip
+                  ? "border-emerald-300 bg-emerald-500 text-white"
+                  : "border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+              }`}
+            >
+              🗺️ Trip
+              {tripSpots.length > 0 && (
+                <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-black ${showTrip ? "bg-white/30 text-white" : "bg-emerald-100 text-emerald-600"}`}>
+                  {tripSpots.length}
+                </span>
+              )}
             </button>
           </div>
 
@@ -365,27 +411,6 @@ export default function MapPage() {
             )}
           </div>
 
-          {/* Legend */}
-          <div className="border-t border-stone-100 px-4 py-4">
-            <p className="mb-2.5 text-[10px] font-bold uppercase tracking-widest text-stone-400">
-              Map Legend
-            </p>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-              {SPOT_CATEGORIES.map((cat) => (
-                <div key={cat} className="flex items-center gap-2">
-                  <div
-                    className="h-2.5 w-2.5 shrink-0 rounded-full"
-                    style={{ backgroundColor: categoryColors[cat] }}
-                  />
-                  <span className="text-xs text-stone-500">{categoryLabels[cat]}</span>
-                </div>
-              ))}
-              <div className="flex items-center gap-2">
-                <div className="h-2.5 w-2.5 shrink-0 rounded-full bg-blue-500 ring-2 ring-blue-200" />
-                <span className="text-xs text-stone-500">You</span>
-              </div>
-            </div>
-          </div>
         </aside>
 
         {/* ── Map ── */}
@@ -394,8 +419,18 @@ export default function MapPage() {
             spots={filteredSpots}
             selectedSpot={selectedSpot}
             userLocation={userLocation}
+            tripSpots={tripSpots}
             onSpotSelect={handleSpotSelect}
           />
+
+          {showTrip && (
+            <TripPlanner
+              spots={tripSpots}
+              onRemove={(id) => setTripSpots((prev) => prev.filter((s) => s.id !== id))}
+              onClear={() => setTripSpots([])}
+              onClose={() => setShowTrip(false)}
+            />
+          )}
 
           {showTravel && selectedSpot && userLocation && (
             <TravelPanel
@@ -404,6 +439,29 @@ export default function MapPage() {
               onClose={() => setShowTravel(false)}
             />
           )}
+
+          {/* Legend — floating bottom-right */}
+          <div className="absolute bottom-8 right-3 z-[400] hidden md:block">
+            <div className="rounded-xl border border-stone-200 bg-white/90 px-3.5 py-3 shadow-md backdrop-blur-sm">
+              <p className="mb-2 text-[9px] font-bold uppercase tracking-widest text-stone-400">
+                Legend
+              </p>
+              <div className="flex flex-col gap-1.5">
+                {SPOT_CATEGORIES.map((cat) => (
+                  <div key={cat} className="flex items-center gap-2">
+                    <div className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: categoryColors[cat] }} />
+                    <span className="text-[11px] text-stone-500">{categoryLabels[cat]}</span>
+                  </div>
+                ))}
+                {userLocation && (
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 shrink-0 rounded-full bg-blue-500 ring-2 ring-blue-200" />
+                    <span className="text-[11px] text-stone-500">You</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
 
           {/* Mobile: bottom card strip */}
           {!showTravel && (
@@ -458,9 +516,11 @@ export default function MapPage() {
         <SpotDetail
           spot={selectedSpot}
           isVisited={visited.has(selectedSpot.id)}
+          isInTrip={tripSpots.some((s) => s.id === selectedSpot.id)}
           onClose={() => setShowDetail(false)}
           onGetDirections={handleGetDirections}
           onToggleVisited={() => toggleVisited(selectedSpot.id)}
+          onToggleTrip={() => toggleTrip(selectedSpot)}
         />
       )}
     </div>
