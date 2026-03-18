@@ -13,6 +13,7 @@ export const touristSpots: TouristSpot[] = [
     address: "Libertad, Butuan City, Agusan del Norte",
     hours: "8:00 AM – 5:00 PM (Mon–Sat)",
     bestTime: "Morning",
+    admission: "Free",
   },
   {
     id: 2,
@@ -26,6 +27,7 @@ export const touristSpots: TouristSpot[] = [
     address: "J.C. Aquino Avenue, Butuan City, Agusan del Norte",
     hours: "8:00 AM – 5:00 PM (Tue–Sun)",
     bestTime: "Morning",
+    admission: "Free",
   },
   {
     id: 3,
@@ -39,6 +41,7 @@ export const touristSpots: TouristSpot[] = [
     address: "Banza, Butuan City, Agusan del Norte",
     hours: "Open anytime",
     bestTime: "Golden hour",
+    admission: "Free",
   },
   {
     id: 4,
@@ -52,6 +55,7 @@ export const touristSpots: TouristSpot[] = [
     address: "Montilla Blvd., Butuan City, Agusan del Norte",
     hours: "6:00 AM – 8:00 PM daily",
     bestTime: "Early morning",
+    admission: "Free",
   },
   {
     id: 5,
@@ -65,6 +69,7 @@ export const touristSpots: TouristSpot[] = [
     address: "Jabonga / Kitcharao, Agusan del Norte",
     hours: "Open anytime",
     bestTime: "Sunrise or sunset",
+    admission: "Free",
   },
   {
     id: 6,
@@ -78,6 +83,7 @@ export const touristSpots: TouristSpot[] = [
     address: "Tiniwisan, Butuan City, Agusan del Norte",
     hours: "6:00 AM – 5:00 PM daily",
     bestTime: "Dry season (Nov–May)",
+    admission: "₱50",
   },
   {
     id: 7,
@@ -91,6 +97,7 @@ export const touristSpots: TouristSpot[] = [
     address: "J.C. Aquino Avenue, Butuan City, Agusan del Norte",
     hours: "8:00 AM – 5:00 PM (Mon–Fri)",
     bestTime: "Weekday morning",
+    admission: "Free",
   },
   {
     id: 8,
@@ -104,6 +111,7 @@ export const touristSpots: TouristSpot[] = [
     address: "Brgy. Bonbon, Butuan City, Agusan del Norte",
     hours: "8:00 AM – 5:00 PM daily",
     bestTime: "Weekday (less crowd)",
+    admission: "₱350+",
   },
   {
     id: 9,
@@ -117,6 +125,7 @@ export const touristSpots: TouristSpot[] = [
     address: "Brgy. Pinamanculan, Butuan City, Agusan del Norte",
     hours: "7:00 AM – 5:00 PM daily",
     bestTime: "Early morning",
+    admission: "₱20",
   },
   {
     id: 10,
@@ -130,6 +139,7 @@ export const touristSpots: TouristSpot[] = [
     address: "Jose S. Aquino Avenue, Butuan City, Agusan del Norte",
     hours: "Open 24/7",
     bestTime: "Late afternoon",
+    admission: "Free",
   },
   {
     id: 11,
@@ -143,6 +153,7 @@ export const touristSpots: TouristSpot[] = [
     address: "Brgy. Bonbon, Butuan City, Agusan del Norte",
     hours: "6:00 AM – 3:00 PM (start trek by)",
     bestTime: "Dry season (Nov–Apr)",
+    admission: "₱50",
   },
   {
     id: 12,
@@ -156,6 +167,7 @@ export const touristSpots: TouristSpot[] = [
     address: "Brgy. Sumile, Butuan City, Agusan del Norte",
     hours: "6:00 AM – 4:00 PM daily",
     bestTime: "Dry season (Nov–May)",
+    admission: "₱30",
   },
   {
     id: 13,
@@ -169,6 +181,7 @@ export const touristSpots: TouristSpot[] = [
     address: "Brgy. Masao, Butuan City, Agusan del Norte",
     hours: "Open anytime",
     bestTime: "Afternoon",
+    admission: "Free",
   },
   {
     id: 14,
@@ -182,6 +195,7 @@ export const touristSpots: TouristSpot[] = [
     address: "Mayor Democrito D. Plaza II Ave., Butuan City, Agusan del Norte",
     hours: "Open 24/7",
     bestTime: "Sunset or night",
+    admission: "Free",
   },
 ];
 

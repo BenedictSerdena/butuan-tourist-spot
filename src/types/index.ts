@@ -9,4 +9,5 @@ export interface TouristSpot {
   address: string;
   hours: string;
   bestTime: string;
+  admission: string;
 }
