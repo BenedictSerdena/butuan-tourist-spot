@@ -197,6 +197,76 @@ export const touristSpots: TouristSpot[] = [
     bestTime: "Sunset or night",
     admission: "Free",
   },
+  {
+    id: 15,
+    name: "Kalan sa Saog",
+    description:
+      "Butuan's most iconic dining experience — open-air grilling directly on heated river stones along the Agusan riverside. Fresh seafood, pork, and chicken grilled the traditional way over natural heat, eaten al fresco with the river breeze.",
+    category: "food",
+    coordinates: [8.953, 125.518],
+    image: "https://placehold.co/640x300/C0392B/white?text=Kalan+sa+Saog",
+    highlights: ["Grilling on natural river stones", "Fresh local seafood", "Riverside open-air setting", "Butuan's signature dining experience"],
+    address: "Along Agusan River, Butuan City, Agusan del Norte",
+    hours: "11:00 AM – 10:00 PM daily",
+    bestTime: "Late afternoon or evening",
+    admission: "No cover charge",
+  },
+  {
+    id: 16,
+    name: "Butuan Agora Public Market",
+    description:
+      "The beating heart of Butuan's food culture. Find fresh kalamay (sweet sticky rice cake), biscocho (toasted bread rusks), puto maya (purple glutinous rice), and tsokolate tablea — all made by local vendors using traditional recipes passed down for generations.",
+    category: "food",
+    coordinates: [8.9495, 125.5395],
+    image: "https://placehold.co/640x300/C0392B/white?text=Agora+Market",
+    highlights: ["Kalamay & biscocho stalls", "Puto maya & tsokolate", "Fresh local produce", "Cheapest authentic Butuan food"],
+    address: "Agora, Butuan City, Agusan del Norte",
+    hours: "5:00 AM – 6:00 PM daily",
+    bestTime: "Early morning",
+    admission: "Free entry",
+  },
+  {
+    id: 17,
+    name: "Almont Inland Resort Restaurant",
+    description:
+      "One of Butuan's most popular dining destinations, set inside a lush resort property. Known for well-prepared Filipino comfort food, fresh Agusan River seafood, and local specialties served in a relaxed garden atmosphere.",
+    category: "food",
+    coordinates: [8.9475, 125.5450],
+    image: "https://placehold.co/640x300/C0392B/white?text=Almont+Restaurant",
+    highlights: ["Grilled Agusan River fish", "Filipino comfort food", "Garden dining setting", "Popular for lunch & family gatherings"],
+    address: "J.C. Aquino Avenue, Butuan City, Agusan del Norte",
+    hours: "7:00 AM – 9:00 PM daily",
+    bestTime: "Lunch",
+    admission: "No cover charge",
+  },
+  {
+    id: 18,
+    name: "Pinakupsan Haus",
+    description:
+      "Home of Butuan's beloved pinakupsan — slow-cooked pork belly made crispy through a traditional double-cooking method unique to Agusan del Norte. A no-frills local eatery that has served this iconic dish to generations of Butuanons.",
+    category: "food",
+    coordinates: [8.946, 125.536],
+    image: "https://placehold.co/640x300/C0392B/white?text=Pinakupsan+Haus",
+    highlights: ["Butuan-style crispy pork", "Traditional double-cook method", "Local institution", "Pairs with garlic fried rice"],
+    address: "Montilla Blvd., Butuan City, Agusan del Norte",
+    hours: "7:00 AM – 3:00 PM (sell-out by noon)",
+    bestTime: "Morning — sells out early",
+    admission: "No cover charge",
+  },
+  {
+    id: 19,
+    name: "Libertad Kalamay & Tsokolate Stalls",
+    description:
+      "A cluster of street-side stalls in Libertad selling Butuan's two most famous sweets: kalamay (coconut milk sticky rice wrapped in banana leaf) and tsokolate (thick native hot chocolate made from local tablea). A must-try before leaving Butuan.",
+    category: "food",
+    coordinates: [8.9488, 125.5310],
+    image: "https://placehold.co/640x300/C0392B/white?text=Kalamay+%26+Tsokolate",
+    highlights: ["Native kalamay in banana leaf", "Tablea-based hot tsokolate", "Take-home pasalubong spot", "Authentic local recipe"],
+    address: "Libertad, Butuan City, Agusan del Norte",
+    hours: "6:00 AM – 6:00 PM daily",
+    bestTime: "Morning",
+    admission: "No cover charge",
+  },
 ];
 
 export const categoryColors: Record<TouristSpot["category"], string> = {
@@ -205,6 +275,7 @@ export const categoryColors: Record<TouristSpot["category"], string> = {
   religious: "#6B4FA0",
   museum: "#1D6FA4",
   recreation: "#D4880A",
+  food: "#C0392B",
 };
 
 export const categoryLabels: Record<TouristSpot["category"], string> = {
@@ -213,6 +284,7 @@ export const categoryLabels: Record<TouristSpot["category"], string> = {
   religious: "Religious",
   museum: "Museum",
   recreation: "Recreation",
+  food: "Food",
 };
 
 export const categoryIcons: Record<TouristSpot["category"], string> = {
@@ -221,6 +293,7 @@ export const categoryIcons: Record<TouristSpot["category"], string> = {
   museum: "🏺",
   religious: "⛪",
   recreation: "🎢",
+  food: "🍽️",
 };
 
 export const SPOT_CATEGORIES: TouristSpot["category"][] = [
@@ -229,4 +302,5 @@ export const SPOT_CATEGORIES: TouristSpot["category"][] = [
   "museum",
   "religious",
   "recreation",
+  "food",
 ];
