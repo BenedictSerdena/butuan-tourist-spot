@@ -7,7 +7,7 @@ export const touristSpots: TouristSpot[] = [
     description:
       "Home to the oldest watercraft ever found in Southeast Asia. The ancient balangay boats, dating back to 320 AD, were discovered in Butuan and are preserved here as a UNESCO heritage treasure.",
     category: "museum",
-    coordinates: [8.9489, 125.5318],
+    coordinates: [8.9520, 125.5480],
     image: "https://upload.wikimedia.org/wikipedia/commons/f/fd/The_Balanghay.jpg",
     highlights: ["Ancient balangay boats (320 AD)", "UNESCO heritage site", "Archaeological finds", "Free admission"],
     address: "Libertad, Butuan City, Agusan del Norte",
@@ -21,7 +21,7 @@ export const touristSpots: TouristSpot[] = [
     description:
       "A regional museum showcasing the rich pre-colonial history of Butuan as the Kingdom of Butuan — one of the earliest polities in the Philippines, with gold artifacts and ancient trade goods.",
     category: "museum",
-    coordinates: [8.9503, 125.5387],
+    coordinates: [8.9538, 125.5261],
     image: "https://upload.wikimedia.org/wikipedia/commons/d/d3/Butuan_National_Museum_%28Butuan%2C_Mindanao%29.jpg",
     highlights: ["Gold artifacts", "Pre-colonial history", "Kingdom of Butuan exhibits", "Free admission"],
     address: "J.C. Aquino Avenue, Butuan City, Agusan del Norte",
@@ -35,7 +35,7 @@ export const touristSpots: TouristSpot[] = [
     description:
       "The ruins of one of the oldest churches in Mindanao, built by the Augustinian Recollect friars in the 17th century. A haunting and beautiful reminder of colonial history in Butuan.",
     category: "heritage",
-    coordinates: [8.9558, 125.5271],
+    coordinates: [8.9720, 125.5384],
     image: "https://upload.wikimedia.org/wikipedia/commons/b/bb/Banza_Church_Ruins_Butuan_City.jpg",
     highlights: ["17th-century ruins", "Augustinian architecture", "Historical landmark", "Photography spot"],
     address: "Banza, Butuan City, Agusan del Norte",
@@ -49,7 +49,7 @@ export const touristSpots: TouristSpot[] = [
     description:
       "The main Roman Catholic cathedral of the Diocese of Butuan. An active place of worship and an architectural landmark in the heart of Butuan City.",
     category: "religious",
-    coordinates: [8.9478, 125.5437],
+    coordinates: [8.9478, 125.5425],
     image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Saint_Joseph_Cathedral_Butuan.jpg/640px-Saint_Joseph_Cathedral_Butuan.jpg",
     highlights: ["Diocesan cathedral", "Active parish", "Colonial-era heritage", "City center landmark"],
     address: "Montilla Blvd., Butuan City, Agusan del Norte",
@@ -63,7 +63,7 @@ export const touristSpots: TouristSpot[] = [
     description:
       "The grand provincial capitol building of Agusan del Norte, surrounded by manicured gardens and an iconic freedom park — a popular spot for Butuanons to relax and celebrate local events.",
     category: "heritage",
-    coordinates: [8.9485, 125.5415],
+    coordinates: [8.9403, 125.5336],
     image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Agusan_del_Norte_Capitol.jpg/640px-Agusan_del_Norte_Capitol.jpg",
     highlights: ["Provincial government seat", "Landscaped grounds", "Freedom park", "Public events venue"],
     address: "J.C. Aquino Avenue, Butuan City, Agusan del Norte",
@@ -119,7 +119,7 @@ export const touristSpots: TouristSpot[] = [
     description:
       "A distinctive 675-meter flat-topped mountain that has been a landmark for Butuan City for over a millennium. The rewarding trek offers views of Butuan City, Agusan River, Butuan Bay, and even Camiguin Island on clear days.",
     category: "nature",
-    coordinates: [8.92, 125.49],
+    coordinates: [8.8783, 125.4675],
     image: "https://placehold.co/640x300/2D6A4F/white?text=Mt.+Mayapay",
     highlights: ["675m flat-topped summit", "Views of Butuan Bay & Camiguin", "3-4 hour trek", "Historic 1,000-year landmark"],
     address: "Brgy. Bonbon, Butuan City, Agusan del Norte",
@@ -147,7 +147,7 @@ export const touristSpots: TouristSpot[] = [
     description:
       "A coastal monument in Barangay Masao marking the historic landing of Ferdinand Magellan in the Philippines on March 17, 1521. Features sculptural monuments, bronze plaques, and commemorates the blood compact between Magellan and Raja Siaiu.",
     category: "heritage",
-    coordinates: [8.944, 125.522],
+    coordinates: [8.9994, 125.4843],
     image: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Magellan%27s_Anchorage_Marker_%40_Brgy._Masao_-_panoramio.jpg",
     highlights: ["Magellan's 1521 landing marker", "Bronze plaques with history", "Coastal monument", "Free admission"],
     address: "Brgy. Masao, Butuan City, Agusan del Norte",
@@ -161,7 +161,7 @@ export const touristSpots: TouristSpot[] = [
     description:
       "The second-longest bridge in Mindanao at 908 meters, this cable-stayed steel bridge spans the Agusan River and is one of Butuan's most recognizable landmarks. It offers sweeping river views and is especially photogenic at dusk.",
     category: "heritage",
-    coordinates: [8.95, 125.51],
+    coordinates: [8.9225, 125.5536],
     image: "https://upload.wikimedia.org/wikipedia/commons/6/63/MacapagalBridge.jpg",
     highlights: ["2nd longest bridge in Mindanao", "908-meter cable-stayed span", "Agusan River views", "Iconic sunset photography spot"],
     address: "Mayor Democrito D. Plaza II Ave., Butuan City, Agusan del Norte",
@@ -189,7 +189,7 @@ export const touristSpots: TouristSpot[] = [
     description:
       "The beating heart of Butuan's food culture. Find fresh kalamay (sweet sticky rice cake), biscocho (toasted bread rusks), puto maya (purple glutinous rice), and tsokolate tablea — all made by local vendors using traditional recipes passed down for generations.",
     category: "food",
-    coordinates: [8.9495, 125.5395],
+    coordinates: [8.9509, 125.5441],
     image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Palengke_-_Danao_City_01_by_Hulagway.jpg/640px-Palengke_-_Danao_City_01_by_Hulagway.jpg",
     highlights: ["Kalamay & biscocho stalls", "Puto maya & tsokolate", "Fresh local produce", "Cheapest authentic Butuan food"],
     address: "Agora, Butuan City, Agusan del Norte",
@@ -245,7 +245,7 @@ export const touristSpots: TouristSpot[] = [
     description:
       "A laid-back rivermouth beach at Barangay Masao where the Agusan River meets Butuan Bay. Popular among locals for swimming, beach volleyball, and watching fishing boats at golden hour. Near the historic Magellan's Landing Site.",
     category: "nature",
-    coordinates: [8.9418, 125.5192],
+    coordinates: [8.9980, 125.4810],
     image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Butuan_Bay_from_Masao.jpg/640px-Butuan_Bay_from_Masao.jpg",
     highlights: ["Rivermouth beach", "Butuan Bay views", "Swimming & volleyball", "Near Magellan's Landing"],
     address: "Brgy. Masao, Butuan City, Agusan del Norte",

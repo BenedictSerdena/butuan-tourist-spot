@@ -6,7 +6,7 @@ import { touristSpots, categoryIcons, categoryLabels, SPOT_CATEGORIES } from "@/
 const STATS = [
   { value: String(touristSpots.length), label: "Tourist Spots" },
   { value: "1521", label: "Year Discovered" },
-  { value: "5", label: "Categories" },
+  { value: String(SPOT_CATEGORIES.length), label: "Categories" },
 ];
 
 export default function LandingPage() {
@@ -52,8 +52,8 @@ export default function LandingPage() {
 
           {/* Subtitle */}
           <p className="mb-10 max-w-md text-base text-stone-500 leading-relaxed sm:text-lg">
-            Explore the ancient Kingdom of Butuan — heritage sites, breathtaking
-            nature, and rich culture, all on one interactive map.
+            Heritage sites, breathtaking nature, and rich culture
+            in the ancient Kingdom of Butuan.
           </p>
 
           {/* Category pills */}

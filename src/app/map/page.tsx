@@ -10,6 +10,7 @@ import SpotDetail from "@/components/SpotDetail";
 import TravelPanel from "@/components/TravelPanel";
 import TripPlanner from "@/components/TripPlanner";
 import { useVisited } from "@/hooks/useVisited";
+import { getOpenInfo } from "@/utils/openNow";
 
 const Map = dynamic(() => import("@/components/Map"), { ssr: false });
 
@@ -53,6 +54,7 @@ export default function MapPage() {
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
   const [locating, setLocating] = useState(false);
   const [showTravel, setShowTravel] = useState(false);
+  const [filterOpenNow, setFilterOpenNow] = useState(false);
   const [tripSpots, setTripSpots] = useState<TouristSpot[]>([]);
   const [showTrip, setShowTrip] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null);
@@ -84,12 +86,13 @@ export default function MapPage() {
         (s) => s.name.toLowerCase().includes(q) || s.address.toLowerCase().includes(q)
       );
     }
+    if (filterOpenNow) spots = spots.filter((s) => getOpenInfo(s.hours).status !== "closed");
     if (sortBy === "name") return [...spots].sort((a, b) => a.name.localeCompare(b.name));
     if (sortBy === "category") return [...spots].sort((a, b) => a.category.localeCompare(b.category));
     if (sortBy === "nearest" && userLocation)
       return [...spots].sort((a, b) => haversineKm(userLocation, a.coordinates) - haversineKm(userLocation, b.coordinates));
     return spots;
-  }, [filter, search, sortBy, userLocation]);
+  }, [filter, search, sortBy, userLocation, filterOpenNow]);
 
   function locateUser(onSuccess: (coords: [number, number]) => void) {
     if (!navigator.geolocation) return;
@@ -151,6 +154,23 @@ export default function MapPage() {
 
         {/* Right actions */}
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowTrip((v) => !v)}
+            className={`hidden items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all sm:flex ${
+              showTrip
+                ? "bg-stone-900 text-white"
+                : tripSpots.length > 0
+                ? "border border-stone-900 text-stone-900 hover:bg-stone-50"
+                : "border border-stone-200 text-stone-500 hover:border-stone-300"
+            }`}
+          >
+            🗺️ Trip
+            {tripSpots.length > 0 && (
+              <span className={`flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-black ${showTrip ? "bg-white text-stone-900" : "bg-stone-900 text-white"}`}>
+                {tripSpots.length}
+              </span>
+            )}
+          </button>
           <button
             onClick={handleLocate}
             title={userLocation ? "Located" : "My Location"}
@@ -265,9 +285,22 @@ export default function MapPage() {
             </div>
 
             <div className="flex items-center justify-between px-0.5">
-              <p className="text-xs font-bold uppercase tracking-widest text-stone-400">
-                {filteredSpots.length} Destination{filteredSpots.length !== 1 ? "s" : ""}
-              </p>
+              <div className="flex items-center gap-2">
+                <p className="text-xs font-bold uppercase tracking-widest text-stone-400">
+                  {filteredSpots.length} Destination{filteredSpots.length !== 1 ? "s" : ""}
+                </p>
+                <button
+                  onClick={() => setFilterOpenNow((v) => !v)}
+                  className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold transition-all ${
+                    filterOpenNow
+                      ? "bg-emerald-500 text-white"
+                      : "border border-stone-200 text-stone-400 hover:border-stone-300"
+                  }`}
+                >
+                  <span className={`h-1.5 w-1.5 rounded-full ${filterOpenNow ? "bg-white" : "bg-emerald-400"}`} />
+                  Open now
+                </button>
+              </div>
 
               <div className="relative" ref={sortRef}>
                 <button
@@ -414,7 +447,8 @@ export default function MapPage() {
         </aside>
 
         {/* ── Map ── */}
-        <main className="relative flex-1">
+        <main className="relative flex-1 min-h-0">
+          <div className="absolute inset-0">
           <Map
             spots={filteredSpots}
             selectedSpot={selectedSpot}
@@ -422,6 +456,7 @@ export default function MapPage() {
             tripSpots={tripSpots}
             onSpotSelect={handleSpotSelect}
           />
+          </div>
 
           {showTrip && (
             <TripPlanner
