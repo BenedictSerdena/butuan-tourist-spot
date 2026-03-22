@@ -5,7 +5,7 @@ import { touristSpots, categoryIcons, categoryLabels, SPOT_CATEGORIES } from "@/
 
 const STATS = [
   { value: String(touristSpots.length), label: "Tourist Spots" },
-  { value: "1521", label: "Year Discovered" },
+  { value: "Free", label: "No sign up needed" },
   { value: String(SPOT_CATEGORIES.length), label: "Categories" },
 ];
 

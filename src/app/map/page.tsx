@@ -94,26 +94,35 @@ export default function MapPage() {
     return spots;
   }, [filter, search, sortBy, userLocation, filterOpenNow]);
 
-  function locateUser(onSuccess: (coords: [number, number]) => void) {
-    if (!navigator.geolocation) return;
+  const watchIdRef = useRef<number | null>(null);
+
+  function startWatching() {
+    if (!navigator.geolocation || watchIdRef.current !== null) return;
     setLocating(true);
-    navigator.geolocation.getCurrentPosition(
+    watchIdRef.current = navigator.geolocation.watchPosition(
       (pos) => {
-        const coords: [number, number] = [pos.coords.latitude, pos.coords.longitude];
-        setUserLocation(coords);
+        setUserLocation([pos.coords.latitude, pos.coords.longitude]);
         setLocating(false);
-        onSuccess(coords);
       },
       () => setLocating(false),
-      { timeout: 10000 }
+      { enableHighAccuracy: true, timeout: 10000 }
     );
   }
 
+  function stopWatching() {
+    if (watchIdRef.current !== null) {
+      navigator.geolocation.clearWatch(watchIdRef.current);
+      watchIdRef.current = null;
+    }
+    setUserLocation(null);
+  }
+
+  useEffect(() => () => { if (watchIdRef.current !== null) navigator.geolocation.clearWatch(watchIdRef.current); }, []);
+
   const handleLocate = useCallback(() => {
-    if (userLocation) return;
-    locateUser(() => {});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userLocation]);
+    if (watchIdRef.current !== null) stopWatching();
+    else startWatching();
+  }, []);
 
   function handleSpotSelect(spot: TouristSpot) {
     setSelectedSpot(spot);
@@ -124,11 +133,8 @@ export default function MapPage() {
   function handleGetDirections(spot: TouristSpot) {
     setShowDetail(false);
     setSelectedSpot(spot);
-    if (!userLocation) {
-      locateUser(() => setShowTravel(true));
-    } else {
-      setShowTravel(true);
-    }
+    if (!userLocation) startWatching();
+    setShowTravel(true);
   }
 
   return (
@@ -173,9 +179,9 @@ export default function MapPage() {
           </button>
           <button
             onClick={handleLocate}
-            title={userLocation ? "Located" : "My Location"}
+            title={userLocation ? "Stop tracking" : "Track my location"}
             className={`flex items-center gap-1.5 rounded-lg p-2 text-sm font-medium transition-colors ${
-              userLocation ? "text-blue-600 bg-blue-50" : "text-stone-500 hover:bg-stone-100 hover:text-stone-800"
+              userLocation ? "text-blue-600 bg-blue-50 hover:bg-blue-100" : "text-stone-500 hover:bg-stone-100 hover:text-stone-800"
             }`}
           >
             {locating ? (
@@ -191,7 +197,7 @@ export default function MapPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
             )}
-            <span className="hidden sm:inline text-xs">{userLocation ? "Located" : "My Location"}</span>
+            <span className="hidden sm:inline text-xs">{locating ? "Locating…" : userLocation ? "Tracking" : "My Location"}</span>
           </button>
         </div>
       </header>
