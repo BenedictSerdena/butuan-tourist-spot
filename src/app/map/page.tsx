@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import { touristSpots, categoryColors, categoryIcons, categoryLabels, SPOT_CATEGORIES } from "@/data/spots";
 import { TouristSpot } from "@/types";
@@ -37,6 +38,7 @@ function haversineKm(a: [number, number], b: [number, number]): number {
 
 export default function MapPage() {
   const { visited, toggle: toggleVisited, reset: resetVisited } = useVisited();
+  const searchParams = useSearchParams();
 
   const handleSuggest = useCallback(() => {
     const unvisited = touristSpots.filter((s) => !visited.has(s.id));
@@ -47,7 +49,9 @@ export default function MapPage() {
   }, [visited]);
   const [selectedSpot, setSelectedSpot] = useState<TouristSpot | null>(null);
   const [showDetail, setShowDetail] = useState(false);
-  const [filter, setFilter] = useState<FilterCategory>("all");
+
+  const initialCategory = searchParams.get("category") as FilterCategory | null;
+  const [filter, setFilter] = useState<FilterCategory>(initialCategory ?? "all");
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<SortKey>("default");
   const [sortOpen, setSortOpen] = useState(false);
@@ -93,6 +97,15 @@ export default function MapPage() {
       return [...spots].sort((a, b) => haversineKm(userLocation, a.coordinates) - haversineKm(userLocation, b.coordinates));
     return spots;
   }, [filter, search, sortBy, userLocation, filterOpenNow]);
+
+  useEffect(() => {
+    const spotId = searchParams.get("spot");
+    if (spotId) {
+      const spot = touristSpots.find((s) => s.id === Number(spotId));
+      if (spot) { setSelectedSpot(spot); setShowDetail(true); }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const watchIdRef = useRef<number | null>(null);
 

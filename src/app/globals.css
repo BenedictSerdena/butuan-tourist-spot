@@ -19,6 +19,10 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+button, a, [role="button"], select, label[for], summary {
+  cursor: pointer;
+}
+
 /* Fix Leaflet map z-index conflicts */
 .leaflet-pane { z-index: 400; }
 .leaflet-top, .leaflet-bottom { z-index: 500; }

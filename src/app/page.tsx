@@ -61,7 +61,7 @@ export default function LandingPage() {
             {SPOT_CATEGORIES.map((cat) => (
               <Link
                 key={cat}
-                href="/map"
+                href={`/map?category=${cat}`}
                 className="inline-flex items-center gap-2 rounded-full border border-stone-300 bg-white/60 px-4 py-2 text-sm text-stone-700 transition-all hover:border-stone-400 hover:bg-white hover:shadow-sm"
               >
                 <span className="text-base leading-none">{categoryIcons[cat]}</span>
@@ -123,7 +123,7 @@ export default function LandingPage() {
             {touristSpots.slice(0, 6).map((spot) => (
               <Link
                 key={spot.id}
-                href="/map"
+                href={`/map?spot=${spot.id}`}
                 className="group overflow-hidden rounded-2xl border border-stone-200 bg-white transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-stone-200"
               >
                 <div className="relative h-44 overflow-hidden bg-stone-100">
