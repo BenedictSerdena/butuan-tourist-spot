@@ -51,6 +51,16 @@ function FlyToSelected({ spot }: { spot: TouristSpot | null }) {
   return null;
 }
 
+function FlyToUser({ location }: { location: [number, number] | null }) {
+  const map = useMap();
+  const hasLocation = location !== null;
+  useEffect(() => {
+    if (location) map.flyTo(location, 16, { duration: 1.5 });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasLocation]);
+  return null;
+}
+
 interface MapProps {
   spots: TouristSpot[];
   selectedSpot: TouristSpot | null;
@@ -71,6 +81,7 @@ export default function Map({ spots, selectedSpot, userLocation, tripSpots, onSp
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <FlyToSelected spot={selectedSpot} />
+      <FlyToUser location={userLocation} />
 
       {userLocation && (
         <>

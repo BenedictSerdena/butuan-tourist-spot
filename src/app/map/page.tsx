@@ -118,7 +118,7 @@ function MapPageInner() {
         setLocating(false);
       },
       () => setLocating(false),
-      { enableHighAccuracy: true, timeout: 10000 }
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
     );
   }
 
