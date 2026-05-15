@@ -494,6 +494,71 @@ function MapPageInner() {
             />
           )}
 
+            {/* Mobile: floating search + controls */}
+          <div className="absolute top-3 left-3 right-3 z-[400] md:hidden flex flex-col gap-1.5">
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <svg className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  type="text"
+                  placeholder="Search spots…"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full rounded-full border-0 bg-white/95 py-2.5 pl-9 pr-8 text-sm text-stone-800 shadow-lg backdrop-blur-sm outline-none placeholder-stone-300"
+                />
+                {search && (
+                  <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400">
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+              <button
+                onClick={handleSuggest}
+                title="Suggest a spot"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/95 shadow-lg backdrop-blur-sm text-base active:scale-95 transition-transform"
+              >
+                🎲
+              </button>
+            </div>
+            <div className="flex gap-1.5">
+              <button
+                onClick={() => setFilterOpenNow((v) => !v)}
+                className={`flex items-center gap-1 rounded-full px-3 py-1.5 text-[11px] font-bold shadow-sm transition-colors ${
+                  filterOpenNow ? "bg-emerald-500 text-white" : "bg-white/95 text-stone-600"
+                }`}
+              >
+                <span className={`h-1.5 w-1.5 rounded-full ${filterOpenNow ? "bg-white" : "bg-emerald-400"}`} />
+                Open now
+              </button>
+              {userLocation && (
+                <span className="flex items-center gap-1 rounded-full bg-blue-500/90 px-3 py-1.5 text-[11px] font-bold text-white shadow-sm">
+                  📍 Tracking
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Mobile: Trip FAB */}
+          <button
+            onClick={() => setShowTrip((v) => !v)}
+            className={`absolute right-3 md:hidden z-[400] flex items-center gap-1.5 rounded-full px-4 py-2.5 text-xs font-bold shadow-xl transition-all active:scale-95 ${
+              showTrip ? "bg-stone-900 text-white" : "bg-white text-stone-800"
+            }`}
+            style={{ bottom: filteredSpots.length > 0 ? "9rem" : "1rem" }}
+          >
+            🗺️
+            {tripSpots.length > 0 && (
+              <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-black ${showTrip ? "bg-white/20" : "bg-stone-900 text-white"}`}>
+                {tripSpots.length}
+              </span>
+            )}
+            Trip
+          </button>
+
           {/* Legend — floating bottom-right */}
           <div className="absolute bottom-8 right-3 z-[400] hidden md:block">
             <div className="rounded-xl border border-stone-200 bg-white/90 px-3.5 py-3 shadow-md backdrop-blur-sm">
@@ -518,46 +583,52 @@ function MapPageInner() {
           </div>
 
           {/* Mobile: bottom card strip */}
-          {!showTravel && (
+          {!showTravel && filteredSpots.length > 0 && (
             <div className="absolute bottom-0 left-0 right-0 md:hidden z-[999]">
-              <div className="flex gap-2.5 overflow-x-auto px-3 pb-4 pt-2">
-                {filteredSpots.map((spot) => (
-                  <button
-                    key={spot.id}
-                    onClick={() => handleSpotSelect(spot)}
-                    className={`flex shrink-0 w-48 items-center gap-2.5 rounded-xl border bg-white p-3 text-left shadow-lg transition-all ${
-                      selectedSpot?.id === spot.id
-                        ? "border-stone-900"
-                        : "border-stone-200"
-                    }`}
-                  >
-                    <div
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-lg"
-                      style={{ backgroundColor: `${categoryColors[spot.category]}18` }}
+              <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory px-4 pb-5 pt-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                {filteredSpots.map((spot) => {
+                  const openInfo = getOpenInfo(spot.hours);
+                  const isOpen = openInfo.status === "open" || openInfo.status === "always";
+                  return (
+                    <button
+                      key={spot.id}
+                      onClick={() => handleSpotSelect(spot)}
+                      className={`flex shrink-0 w-52 snap-start flex-col overflow-hidden rounded-2xl border bg-white text-left shadow-lg transition-all active:scale-[0.98] ${
+                        selectedSpot?.id === spot.id ? "border-stone-900 shadow-xl" : "border-stone-200"
+                      }`}
                     >
-                      {categoryIcons[spot.category]}
-                    </div>
-                    <div className="min-w-0">
-                      <p
-                        className="text-[9px] font-bold uppercase tracking-wider"
-                        style={{ color: categoryColors[spot.category] }}
-                      >
-                        {categoryLabels[spot.category]}
-                      </p>
-                      <p className="text-xs font-semibold text-stone-900 line-clamp-2 leading-snug">
-                        {spot.name}
-                      </p>
-                    </div>
-                  </button>
-                ))}
+                      <div className="relative h-24 overflow-hidden bg-stone-100">
+                        <img
+                          src={spot.image}
+                          alt={spot.name}
+                          className="h-full w-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = `https://placehold.co/208x96/${categoryColors[spot.category].replace("#", "")}/ffffff?text=${encodeURIComponent(spot.name.split(" ")[0])}`;
+                          }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                        <span className={`absolute right-2 top-2 flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold ${isOpen ? "bg-emerald-500 text-white" : "bg-black/60 text-white"}`}>
+                          <span className={`h-1.5 w-1.5 rounded-full ${isOpen ? "bg-white" : "bg-red-400"}`} />
+                          {openInfo.label}
+                        </span>
+                      </div>
+                      <div className="p-3">
+                        <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: categoryColors[spot.category] }}>
+                          {categoryIcons[spot.category]} {categoryLabels[spot.category]}
+                        </p>
+                        <p className="mt-0.5 text-xs font-bold text-stone-900 line-clamp-2 leading-snug">{spot.name}</p>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
         </main>
       </div>
 
-      {/* ── Footer ── */}
-      <footer className="z-10 flex items-center justify-between border-t border-stone-200 bg-white px-6 py-3">
+      {/* ── Footer — desktop only ── */}
+      <footer className="z-10 hidden sm:flex items-center justify-between border-t border-stone-200 bg-white px-6 py-3">
         <Link href="/" className="text-xs font-semibold text-stone-500 hover:text-stone-800 transition-colors">
           ← Back to Home
         </Link>
