@@ -8,10 +8,10 @@ import { getOpenInfo } from "@/utils/openNow";
 
 export default function SpotPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
+  const [copied, setCopied] = useState(false);
+
   const spot = touristSpots.find((s) => s.id === Number(id));
   if (!spot) return notFound();
-
-  const [copied, setCopied] = useState(false);
   const color = categoryColors[spot.category];
   const openInfo = getOpenInfo(spot.hours);
   const isOpen = openInfo.status === "open" || openInfo.status === "always";
