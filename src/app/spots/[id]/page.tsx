@@ -9,7 +9,7 @@ import { getOpenInfo } from "@/utils/openNow";
 export default function SpotPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const spot = touristSpots.find((s) => s.id === Number(id));
-  if (!spot) notFound();
+  if (!spot) return notFound();
 
   const [copied, setCopied] = useState(false);
   const color = categoryColors[spot.category];
