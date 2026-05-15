@@ -15,9 +15,8 @@ export default function SpotPage({ params }: { params: Promise<{ id: string }> }
   const color = categoryColors[spot.category];
   const openInfo = getOpenInfo(spot.hours);
   const isOpen = openInfo.status === "open" || openInfo.status === "always";
-  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${spot.coordinates[0]},${spot.coordinates[1]}`;
-
   async function handleShare() {
+    if (!spot) return;
     const url = typeof window !== "undefined" ? window.location.href : "";
     if (navigator.share) {
       await navigator.share({ title: spot.name, text: spot.description.slice(0, 100) + "…", url }).catch(() => null);
