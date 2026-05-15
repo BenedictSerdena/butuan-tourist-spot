@@ -43,10 +43,10 @@ export default function SpotDetail({ spot, isVisited, isInTrip, onClose, onGetDi
   }
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-end justify-center sm:items-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-[9999] flex items-end justify-center sm:items-center px-4 pb-4 pt-4 bg-black/60 backdrop-blur-sm">
+      <div className="w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl max-h-[88dvh] flex flex-col">
         {/* Image */}
-        <div className="relative h-52 overflow-hidden bg-gray-100">
+        <div className="relative h-40 sm:h-52 overflow-hidden bg-gray-100">
           <img
             src={spot.image}
             alt={spot.name}
