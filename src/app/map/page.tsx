@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useState, useCallback, useMemo, useEffect, useRef } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef, Suspense } from "react";
 import { touristSpots, categoryColors, categoryIcons, categoryLabels, SPOT_CATEGORIES } from "@/data/spots";
 import { TouristSpot } from "@/types";
 import SpotCard from "@/components/SpotCard";
@@ -36,7 +36,7 @@ function haversineKm(a: [number, number], b: [number, number]): number {
 }
 
 
-export default function MapPage() {
+function MapPageInner() {
   const { visited, toggle: toggleVisited, reset: resetVisited } = useVisited();
   const searchParams = useSearchParams();
 
@@ -578,5 +578,13 @@ export default function MapPage() {
         />
       )}
     </div>
+  );
+}
+
+export default function MapPage() {
+  return (
+    <Suspense>
+      <MapPageInner />
+    </Suspense>
   );
 }
